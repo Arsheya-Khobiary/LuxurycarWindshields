@@ -1,6 +1,7 @@
 import { readFileSync, existsSync, writeFileSync, copyFileSync } from 'fs';
 import { join, resolve as pathResolve } from 'path';
 import { loadEnv, type Plugin } from 'vite';
+import { SCHEMA_KNOWS_ABOUT, SEO_KEYWORD_PHRASES } from '../src/data/seoKeywords';
 
 function trimSlash(u: string): string {
   return u.replace(/\/$/, '');
@@ -62,7 +63,10 @@ export function siteUrlPlugin(mode: string, cwd: string): Plugin {
     name: 'site-url',
     transformIndexHtml(html) {
       const base = resolveSiteUrl(mode, cwd);
-      return html.replace(/%SITE_URL%/g, base);
+      return html
+        .replace(/%SITE_URL%/g, base)
+        .replace('%SCHEMA_KNOWS_ABOUT%', JSON.stringify(SCHEMA_KNOWS_ABOUT))
+        .replace('%SEO_KEYWORDS_JSON%', JSON.stringify(SEO_KEYWORD_PHRASES));
     },
     closeBundle() {
       const base = resolveSiteUrl(mode, cwd);
