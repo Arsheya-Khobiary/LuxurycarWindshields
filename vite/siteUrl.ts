@@ -7,11 +7,16 @@ function trimSlash(u: string): string {
   return u.replace(/\/$/, '');
 }
 
-function normalizeUrl(u: string): string {
-  const t = u.trim();
+function normalizeUrl(u: string | undefined | null): string {
+  const t = (u ?? '').trim();
   if (!t) return '';
   if (/^https?:\/\//i.test(t)) return trimSlash(t);
   return trimSlash(`https://${t.replace(/^\/\//, '')}`);
+}
+
+function vercelDeploymentOrigin(): string {
+  const host = (process.env.VERCEL_URL ?? '').trim().replace(/^https?:\/\//i, '');
+  return host ? `https://${host}` : '';
 }
 
 /**
@@ -19,18 +24,26 @@ function normalizeUrl(u: string): string {
  * Override with VITE_SITE_URL; many hosts set VERCEL_URL, URL, RENDER_EXTERNAL_URL, etc.
  */
 export function resolveSiteUrl(mode: string, cwd: string): string {
-  const fileEnv = loadEnv(mode, cwd, '');
-  const fromProcess = (k: string) => (process.env[k] ?? '').trim();
+  let fileEnv: Record<string, string> = {};
+  try {
+    fileEnv = loadEnv(mode, cwd, '');
+  } catch {
+    fileEnv = {};
+  }
 
-  const candidates = [
+  const fromProcess = (k: string) => String(process.env[k] ?? '').trim();
+
+  const candidates: string[] = [
     fromProcess('VITE_SITE_URL'),
-    fileEnv.VITE_SITE_URL,
+    String(fileEnv.VITE_SITE_URL ?? '').trim(),
+    fromProcess('VERCEL_PROJECT_PRODUCTION_URL'),
+    fromProcess('VERCEL_BRANCH_URL'),
+    vercelDeploymentOrigin(),
     fromProcess('URL'),
     fromProcess('DEPLOY_PRIME_URL'),
     fromProcess('RENDER_EXTERNAL_URL'),
     fromProcess('CF_PAGES_URL'),
-    fromProcess('VERCEL_URL') ? `https://${fromProcess('VERCEL_URL').replace(/^https?:\/\//i, '')}` : '',
-  ];
+  ].map((c) => String(c ?? ''));
 
   for (const c of candidates) {
     const n = normalizeUrl(c);
@@ -63,42 +76,56 @@ export function siteUrlPlugin(mode: string, cwd: string): Plugin {
     name: 'site-url',
     transformIndexHtml(html) {
       const base = resolveSiteUrl(mode, cwd);
+      let knowsJson: string;
+      let keywordsJson: string;
+      try {
+        knowsJson = JSON.stringify(SCHEMA_KNOWS_ABOUT);
+        keywordsJson = JSON.stringify(SEO_KEYWORD_PHRASES);
+      } catch (e) {
+        console.error('[site-url] JSON stringify failed for schema injection', e);
+        knowsJson = '[]';
+        keywordsJson = '[]';
+      }
       return html
         .replace(/%SITE_URL%/g, base)
-        .replace('%SCHEMA_KNOWS_ABOUT%', JSON.stringify(SCHEMA_KNOWS_ABOUT))
-        .replace('%SEO_KEYWORDS_JSON%', JSON.stringify(SEO_KEYWORD_PHRASES));
+        .replace('%SCHEMA_KNOWS_ABOUT%', knowsJson)
+        .replace('%SEO_KEYWORDS_JSON%', keywordsJson);
     },
     closeBundle() {
-      const base = resolveSiteUrl(mode, cwd);
-      const outDir = pathResolve(cwd, 'build');
-      if (!existsSync(outDir)) return;
-      writeFileSync(
-        join(outDir, 'robots.txt'),
-        [`User-agent: *`, `Allow: /`, ``, `Sitemap: ${base}/sitemap.xml`, ``].join('\n'),
-        'utf-8',
-      );
-      writeFileSync(
-        join(outDir, 'sitemap.xml'),
-        [
-          `<?xml version="1.0" encoding="UTF-8"?>`,
-          `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`,
-          `  <url>`,
-          `    <loc>${base}/</loc>`,
-          `    <changefreq>weekly</changefreq>`,
-          `    <priority>1.0</priority>`,
-          `  </url>`,
-          `</urlset>`,
-          ``,
-        ].join('\n'),
-        'utf-8',
-      );
-      const ogSrc = join(cwd, 'src/assets/a4d8ef0d87474662cd76e7630a7f78504b069b4d.png');
-      if (existsSync(ogSrc)) {
-        try {
-          copyFileSync(ogSrc, join(outDir, 'opengraph.png'));
-        } catch {
-          /* ignore */
+      try {
+        const base = resolveSiteUrl(mode, cwd);
+        const outDir = pathResolve(cwd, 'build');
+        if (!existsSync(outDir)) return;
+        writeFileSync(
+          join(outDir, 'robots.txt'),
+          [`User-agent: *`, `Allow: /`, ``, `Sitemap: ${base}/sitemap.xml`, ``].join('\n'),
+          'utf-8',
+        );
+        writeFileSync(
+          join(outDir, 'sitemap.xml'),
+          [
+            `<?xml version="1.0" encoding="UTF-8"?>`,
+            `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`,
+            `  <url>`,
+            `    <loc>${base}/</loc>`,
+            `    <changefreq>weekly</changefreq>`,
+            `    <priority>1.0</priority>`,
+            `  </url>`,
+            `</urlset>`,
+            ``,
+          ].join('\n'),
+          'utf-8',
+        );
+        const ogSrc = join(cwd, 'src/assets/a4d8ef0d87474662cd76e7630a7f78504b069b4d.png');
+        if (existsSync(ogSrc)) {
+          try {
+            copyFileSync(ogSrc, join(outDir, 'opengraph.png'));
+          } catch {
+            /* ignore */
+          }
         }
+      } catch (e) {
+        console.warn('[site-url] closeBundle skipped (non-fatal):', e);
       }
     },
   };
