@@ -6,6 +6,7 @@ import { Button } from './ui/button';
 import { UK_CAR_GLASS_OPTIONS } from '../data/ukCarGlass';
 import { buildQuoteWhatsAppMessage } from '../lib/buildQuoteMessage';
 import { smsHref, whatsappDigits } from '../lib/phone';
+import quoteBackground from '../assets/Image (44).jpg';
 
 interface QuoteRequestFormProps {
   whatsappNumber: string;
@@ -54,26 +55,35 @@ export function QuoteRequestForm({ whatsappNumber }: QuoteRequestFormProps) {
   return (
     <section
       id="quote"
-      className="relative scroll-mt-24 border-t border-slate-200 bg-gradient-to-b from-white via-violet-50/30 to-white py-20 md:py-24"
+      className="relative scroll-mt-24 overflow-hidden border-t border-slate-200/60 bg-transparent py-20 md:py-24"
       aria-labelledby="quote-heading"
     >
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-300/60 to-transparent" />
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
+        <img
+          src={quoteBackground}
+          alt=""
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/12 via-transparent to-slate-900/15" />
+      </div>
 
-      <div className="relative mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-10 text-center md:mb-12">
-          <p className="mb-2 text-xs font-bold uppercase tracking-[0.35em] text-violet-700">
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-px bg-gradient-to-r from-transparent via-violet-300/50 to-transparent" />
+
+      <div className="relative z-10 mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-10 rounded-2xl border border-white/55 bg-white/55 px-4 py-6 shadow-sm backdrop-blur-lg md:mb-12 md:px-6 md:py-8">
+          <p className="mb-2 text-xs font-bold uppercase tracking-[0.35em] text-violet-800 drop-shadow-sm">
             Instant quote
           </p>
           <h2
             id="quote-heading"
-            className="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl md:text-5xl"
+            className="text-3xl font-black tracking-tight text-slate-900 drop-shadow-sm sm:text-4xl md:text-5xl"
           >
             Request a{' '}
             <span className="bg-gradient-to-r from-violet-700 to-blue-600 bg-clip-text text-transparent">
               quote
             </span>
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-800 sm:text-lg">
             Same-day appointments where possible. <strong className="text-red-600">24/7</strong> for emergencies.
             Tell us your vehicle and postcode — we&apos;ll respond quickly.
           </p>
@@ -82,7 +92,7 @@ export function QuoteRequestForm({ whatsappNumber }: QuoteRequestFormProps) {
 
         <form
           onSubmit={handleSubmit}
-          className="rounded-3xl border border-slate-200/90 bg-white/95 p-6 shadow-[0_20px_50px_-20px_rgba(79,70,229,0.15)] backdrop-blur-sm sm:p-8 md:p-10"
+          className="rounded-3xl border border-white/60 bg-white/90 p-6 shadow-[0_20px_50px_-20px_rgba(79,70,229,0.25)] backdrop-blur-lg sm:p-8 md:p-10"
         >
           <div className="space-y-6">
             <div className="space-y-2">

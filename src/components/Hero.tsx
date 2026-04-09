@@ -1,5 +1,6 @@
 import { Phone, MessageCircle, ClipboardList } from 'lucide-react';
-import logo from 'figma:asset/b760a8e1e06d093550e8b014821dcfa4ca8a7476.png';
+import logo from '../assets/Image (46).jpg';
+import heroBackground from '../assets/Image (45).jpg';
 import { HeroTopMarquee } from './HeroTopMarquee';
 
 interface HeroProps {
@@ -27,17 +28,18 @@ export function Hero({ whatsappNumber, phoneNumber, displayPhone }: HeroProps) {
       <HeroTopMarquee />
 
       <div className="pointer-events-none absolute inset-0" aria-hidden>
-        <div className="absolute -top-20 right-[15%] h-72 w-72 rounded-full bg-violet-300/20 blur-[100px]" />
-        <div className="absolute bottom-0 left-[10%] h-80 w-80 rounded-full bg-blue-300/15 blur-[110px]" />
+        <div className="absolute -top-20 right-[15%] h-72 w-72 rounded-full bg-violet-300/16 blur-[100px]" />
+        <div className="absolute bottom-0 left-[10%] h-80 w-80 rounded-full bg-blue-300/12 blur-[110px]" />
       </div>
 
-      <div className="absolute inset-0 opacity-[0.04]">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1578802234653-5f6ee40b09db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsb25kb24lMjBjaXR5JTIwbmlnaHQlMjBsaWdodHN8ZW58MXx8fHwxNzc0OTcxNjkzfDA&ixlib=rb-4.1.0&q=80&w=1080')`,
-          }}
+      <div className="absolute inset-0" aria-hidden>
+        <img
+          src={heroBackground}
+          alt=""
+          className="h-full w-full object-cover"
         />
+        {/* White/slate wash — photo still visible but softened */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-50/82 via-white/68 to-blue-50/72" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-6 py-20 text-center">
@@ -62,7 +64,10 @@ export function Hero({ whatsappNumber, phoneNumber, displayPhone }: HeroProps) {
           </span>
         </h1>
 
-        <p id="speakable-summary" className="mx-auto mb-10 max-w-3xl text-lg font-semibold text-slate-800 md:text-2xl">
+        <p
+          id="speakable-summary"
+          className="mx-auto mb-10 max-w-3xl text-lg font-semibold text-slate-800 md:text-2xl"
+        >
           Car glass and windscreen replacement in London —{' '}
           <strong>complete glass replacement for all vehicle types.</strong>
         </p>
