@@ -152,7 +152,7 @@ export function QuoteRequestForm({ whatsappNumber }: QuoteRequestFormProps) {
                 onChange={(e) => setGlassId(e.target.value)}
                 className="border-input bg-input-background focus-visible:ring-ring/50 h-11 w-full rounded-md border px-3 text-base text-slate-900 shadow-none outline-none focus-visible:ring-[3px] md:text-sm"
               >
-                <option value="">Select the glass you need (UK terms)</option>
+                <option value="">Select the glass you need</option>
                 {UK_CAR_GLASS_OPTIONS.map((opt) => (
                   <option key={opt.id} value={opt.id}>
                     {opt.label}
@@ -220,7 +220,7 @@ export function QuoteRequestForm({ whatsappNumber }: QuoteRequestFormProps) {
             <ul className="border-t border-slate-100 pt-6 text-sm text-slate-600">
               <li className="flex gap-2 py-1">
                 <span className="text-violet-600">✓</span>
-                OEM-quality and pattern glass to UK standards
+                OEM-quality and aftermarket glass to UK standards
               </li>
               <li className="flex gap-2 py-1">
                 <span className="text-violet-600">✓</span>

@@ -84,7 +84,7 @@ export function TrustMetrics() {
             className="mx-auto max-w-3xl text-base leading-relaxed text-slate-600 sm:text-lg"
           >
             Professional car glass replacement across London and surrounding areas. If your windscreen is cracked,
-            badly damaged, or fully shattered, our team provides fast and reliable replacements.
+            highly damaged, or fully shattered, our team provides fast and reliable replacements.
           </p>
         </div>
 
@@ -94,7 +94,7 @@ export function TrustMetrics() {
             return (
               <article
                 key={item.title}
-                className="trust-metric-card group relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white/90 p-7 shadow-[0_2px_20px_-4px_rgba(79,70,229,0.07)] backdrop-blur-sm transition-[transform,box-shadow,border-color] duration-500 ease-out hover:-translate-y-0.5 hover:border-violet-200/90 hover:shadow-[0_20px_40px_-12px_rgba(79,70,229,0.12)] sm:p-8"
+                className="trust-metric-card group relative overflow-hidden rounded-2xl border border-violet-200/80 bg-gradient-to-br from-slate-100/95 via-violet-50/85 to-slate-100/90 p-7 shadow-[0_2px_24px_-4px_rgba(79,70,229,0.12)] backdrop-blur-sm transition-[transform,box-shadow,border-color] duration-500 ease-out hover:-translate-y-0.5 hover:border-violet-300/90 hover:shadow-[0_20px_40px_-12px_rgba(79,70,229,0.18)] sm:p-8"
                 style={{ animationDelay: `${80 + index * 75}ms` }}
               >
                 <div

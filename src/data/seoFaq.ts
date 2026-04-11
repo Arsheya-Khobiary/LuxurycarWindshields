@@ -33,7 +33,7 @@ export const SEO_FAQ_ENTRIES = [
   {
     question: 'How much does windscreen replacement cost in London?',
     answer:
-      'Price depends on your vehicle, glass specification (OEM vs pattern), sensors and ADAS, and whether the job is mobile. We give a clear quote after you share your registration and postcode.',
+      'Price depends on your vehicle, glass specification (OEM vs aftermarket), sensors and ADAS, and whether the job is mobile. We give a clear quote after you share your registration and postcode.',
   },
   {
     question: 'Which London boroughs and areas do you cover?',

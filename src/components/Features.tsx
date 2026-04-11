@@ -49,7 +49,7 @@ export function Features() {
     {
       icon: Wrench,
       title: 'Expert installation',
-      description: 'Trained automotive glaziers — bonded fittings to professional standards',
+      description: 'Certified Technicians for windscreen and car glass replacements.',
     },
     {
       icon: Shield,
